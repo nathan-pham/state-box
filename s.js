@@ -32,21 +32,33 @@ const expect = {
         typeof v === "function"
     ),
 
-    "object": (v) => typeof v === "object" && v !== null
-}
+    "object": (v, options) => {
+        const passed = typeof v === "object" && v !== null
 
-const s = (original, format) => {
-    const method = typeof format
-
-    if(expect.hasOwnProperty(method)) {
-
-    } else {
-
+        if(passed) {
+            for(const [key, value] of Object.entries(v)) {
+                if(options.hasOwnProperty(key)) {
+                    if(expect["object"](value)) {
+                        return s(value, options[key])
+                    } else {
+                        return s(value, options)
+                    }
+                } else {
+                    return false
+                }
+            }
+        } else {
+            return false
+        }
     }
 }
 
-// "object": (v, {format}) => {
-//     for(const [key, value] of Object.entries(v)) {
-//         // if(format[key] == key && expected[typeof value])
-//     }
-// }
+export const s = (v, options) => {
+    const method = typeof options
+
+    if(expect.hasOwnProperty(method)) {
+        expect[method](v, options)
+    } else {
+        return false 
+    }
+}
