@@ -1,24 +1,22 @@
 import { s } from "./s.js"
 
+const expect = true
+
 const tests = [
-    {
-        value: undefined,
-        options: undefined
-    },
-    {
-        value: null,
-        options: null
-    },
-    {
-        value: "state-box"
-    },
-    {
-        value: "state-box",
-        length: 9
-    }
-].forEach(({value, options}, i) => {
+    {args: [undefined, undefined], expect},
+    {args: [null, null], expect},
+    {args: ["state-box"], expect},
+    {args: ["state-box", {length: 9}], expect},
+    // {
+    //     value: "state-box",
+    //     options: {
+    //         min: 0,
+    //         max: 2
+    //     }
+    // }
+].forEach(({args, expect}, i) => {
     const testID = String(i + 1)
     console.log("test:", testID)
-    console.log("value:", value, "options:", options)
-    console.log(s(value, options) ? "passed" : "failed", "test:", testID, "\n")
+    console.log("args:", args)
+    console.log(s(...args) == expect ? "passed" : "failed", "test:", testID, "\n")
 })

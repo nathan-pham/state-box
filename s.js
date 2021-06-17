@@ -4,7 +4,8 @@ const expect = {
 
     "string": (v, {length, min=0, max=Infinity}) => (
         typeof v == "string"
-            && (v.length == length || (v.length >= min && v.length <= max))
+            && v.length == length
+            && v.length >= min && v.length <= max
     ),
 
     "number": (v, {finite, integer, even, min, max}) => (
