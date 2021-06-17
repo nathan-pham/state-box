@@ -1,7 +1,7 @@
 import { s } from "./s.js"
 
 const expect = true
-
+const failed = []
 const tests = [
     {args: [undefined, undefined], expect},
     {args: [null, null], expect},
@@ -19,12 +19,21 @@ const tests = [
     {args: [true, Boolean], expect},
     {args: [false, Boolean], expect},
 
+    {args: [[1, 2, 3], Array], expect}
+
     // {args: [], expect},
     // {args: [], expect},
 
-].forEach(({args, expect}, i) => {
-    const testID = String(i + 1)
+].forEach(({args, expect}, testID) => {
     console.log("test:", testID)
     console.log("args:", args)
-    console.log(s(...args) == !!expect ? "passed" : "failed", "test:", testID, "\n")
+
+    const result = s(...args) == !!expect ? "passed" : "failed"
+    console.log(result, "test:", testID, "\n")
+
+    if(result == "failed") {
+        failed.push(testID)
+    }
 })
+
+console.log("failed:", failed.join(', '))

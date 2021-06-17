@@ -21,11 +21,11 @@ const expect = {
         typeof v == "boolean"
     ),
     
-    "array": (v, {length, min, max, format}) => (
-        isArray(v)
-            ? v.length == length
+    "array": (v, {length, min=0, max=Infinity, format}) => (
+        Array.isArray(v)
+            ? (length ? v.length == length : v)
                 && (v.length >= min && v.length <= max)
-                && format ? v.filter((f, i) => format[i] == f).length == 0 : v
+                && (format ? v.filter((f, i) => format[i] == f).length == 0 : v)
             : false
     ),
 
@@ -50,8 +50,22 @@ const expect = {
     }
 }
 
+const type = (check) => {
+    const str = String(check.prototype ? check.prototype.constructor : check.constructor).toLowerCase()
+    const cname = str.match(/function\s(\w*)/)[1]
+    const aliases = ['', 'anonymous']
+
+    return aliases.includes(cname) ? "function" : cname
+}
+
 export const s = (v, template, options={}) => {
-    const method = expect["null"](template) ? "null" : typeof v
+    const method = template 
+        ? type(template) 
+        : typeof template == "object" && template == null
+            ? "null"
+            : typeof template
+
+
     console.log("method:", method)
 
     if(expect.hasOwnProperty(method)) {
