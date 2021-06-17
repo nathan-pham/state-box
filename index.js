@@ -11,6 +11,10 @@ const tests = [
     },
     {
         value: "state-box"
+    },
+    {
+        value: "state-box",
+        length: 9
     }
 ].forEach(({value, options}, i) => {
     const testID = String(i + 1)
