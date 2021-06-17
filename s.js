@@ -4,17 +4,17 @@ const expect = {
 
     "string": (v, {length, min=0, max=Infinity}) => (
         typeof v == "string"
-            && v.length == length
-            && v.length >= min && v.length <= max
+            && (length ? v.length == length : v)
+            && (v.length >= min && v.length <= max)
     ),
 
-    "number": (v, {finite, integer, even, min, max}) => (
+    "number": (v, {finite, integer, even, min=0, max=Infinity}) => (
         isNaN(v) 
             ? false
-            : finite ? isFinite(v) : v
-                && (even >= min && even <= max)
-                && even ? v % 2 == 0 : v
-                && integer ? v % 1 !== 0 : v
+            : (finite ? isFinite(v) : v)
+                && (integer ? v % 1 !== 0 : v)
+                && (even ? v % 2 == 0 : v)
+                && (v >= min && v <= max)
     ),
 
     "boolean": (v) => (
@@ -57,6 +57,7 @@ export const s = (v, options={}) => {
     if(expect.hasOwnProperty(method)) {
         return expect[method](v, options)
     } else {
+        console.log("unknown method")
         return false 
     }
 }
