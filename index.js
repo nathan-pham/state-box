@@ -2,6 +2,9 @@ import { s } from "./s.js"
 
 const expect = true
 const failed = []
+
+// const arrayTemplate = Array.from({length: 3}, () => Number)
+
 const tests = [
     {args: [undefined, undefined], expect},
     {args: [null, null], expect},
@@ -19,8 +22,14 @@ const tests = [
     {args: [true, Boolean], expect},
     {args: [false, Boolean], expect},
 
-    {args: [[1, 2, 3], Array], expect}
+    {args: [[1, 2, 3], [Number, Number, Number]], expect},
+    {args: [[1, 2, 3], Array.from({length: 3}, () => Number)], expect},
 
+    {args: [(() => {}), Function], expect},
+
+    {args: [{test: "hello"}, {test: String}], expect},
+    {args: [{test: {sub_test: "hello"}}, {test: {sub_test: Number}}]},
+    {args: [{test: {sub_test: "hello"}}, {test: {sub_test: String}}], expect}
     // {args: [], expect},
     // {args: [], expect},
 
@@ -28,12 +37,17 @@ const tests = [
     console.log("test:", testID)
     console.log("args:", args)
 
-    const result = s(...args) == !!expect ? "passed" : "failed"
-    console.log(result, "test:", testID, "\n")
+    const result = s(...args)
+    const summary = result == !!expect ? "passed" : "failed"
+    console.log("result:", result)
+    console.log(summary, "test:", testID, "\n")
 
-    if(result == "failed") {
+
+    if(summary == "failed") {
         failed.push(testID)
     }
 })
 
-console.log("failed:", failed.join(', '))
+console.log("failed:", failed.length == 0 ? "none" : failed.join(', '))
+// console.log(Array.from({length: 3}, () => Number))
+console.log(Array.from({length: 3}, () => Number))
