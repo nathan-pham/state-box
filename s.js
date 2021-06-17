@@ -12,7 +12,7 @@ const expect = {
         isNaN(v) 
             ? false
             : (finite ? isFinite(v) : v)
-                && (integer ? v % 1 !== 0 : v)
+                && (integer ? parseInt(v) == v : v)
                 && (even ? v % 2 == 0 : v)
                 && (v >= min && v <= max)
     ),
@@ -50,12 +50,12 @@ const expect = {
     }
 }
 
-export const s = (v, options={}) => {
-    const method = expect["null"](options) ? "null" : typeof v
+export const s = (v, template, options={}) => {
+    const method = expect["null"](template) ? "null" : typeof v
     console.log("method:", method)
 
     if(expect.hasOwnProperty(method)) {
-        return expect[method](v, options)
+        return expect[method](v, options || template)
     } else {
         console.log("unknown method")
         return false 
